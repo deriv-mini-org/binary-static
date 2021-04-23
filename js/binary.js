@@ -9637,6 +9637,7 @@ var BinaryLoader = function () {
             });
         }
         if (Client.isLoggedIn() && Client.isOptionsBlocked()) {
+            console.log('Message showing');
             BinarySocket.wait('authorize').then(function () {
                 return displayMessage(error_messages.options_blocked());
             });
