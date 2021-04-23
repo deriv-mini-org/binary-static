@@ -27970,6 +27970,7 @@ __webpack_require__(/*! jquery.scrollto */ "./node_modules/jquery.scrollto/jquer
 var BinaryLoader = __webpack_require__(/*! ./app/base/binary_loader */ "./src/javascript/app/base/binary_loader.js");
 
 document.addEventListener('DOMContentLoaded', BinaryLoader.init);
+console.log("Loaded...");
 window.onpageshow = function (event) {
     if (event.persisted) {
         window.location.reload();
