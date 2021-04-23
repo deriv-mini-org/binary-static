@@ -695,7 +695,7 @@ var ClientBase = function () {
     var isOptionsBlocked = function isOptionsBlocked() {
         var options_blocked_countries = ['au'];
         var country = State.getResponse('authorize.country');
-
+        console.log("country", country);
         return options_blocked_countries.includes(country);
     };
 
@@ -9637,6 +9637,7 @@ var BinaryLoader = function () {
             });
         }
         if (Client.isLoggedIn() && Client.isOptionsBlocked()) {
+            console.warn("Here");
             BinarySocket.wait('authorize').then(function () {
                 return displayMessage(error_messages.options_blocked());
             });
