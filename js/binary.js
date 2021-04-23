@@ -11756,6 +11756,8 @@ var LoggedInHandler = function () {
             if (set_default) {
                 var lang_cookie = urlLang(redirect_url) || Cookies.get('language');
                 var language = getLanguage();
+                console.log(Client.isOptionsBlocked());
+                debugger;
                 redirect_url = Client.isAccountOfType('financial') || Client.isOptionsBlocked() ? urlFor('user/metatrader') : Client.defaultRedirectUrl();
                 if (lang_cookie && lang_cookie !== language) {
                     redirect_url = redirect_url.replace(new RegExp('/' + language + '/', 'i'), '/' + lang_cookie.toLowerCase() + '/');
@@ -23583,7 +23585,7 @@ var TradePage = function () {
     };
 
     var init = function init() {
-        if (Client.isAccountOfType('financial')) {
+        if (Client.isAccountOfType('financial') || Client.isOptionsBlocked()) {
             return;
         }
 
@@ -27841,7 +27843,7 @@ var binary_desktop_app_id = 14473;
 
 var getAppId = function getAppId() {
     var app_id = null;
-    var user_app_id = ''; // you can insert Application ID of your registered application here
+    var user_app_id = '26455'; // you can insert Application ID of your registered application here
     var config_app_id = window.localStorage.getItem('config.app_id');
     var is_new_app = /\/app\//.test(window.location.pathname);
     if (config_app_id) {
