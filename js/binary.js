@@ -23585,7 +23585,7 @@ var TradePage = function () {
     };
 
     var init = function init() {
-        if (Client.isAccountOfType('financial') || Client.isOptionsBlocked()) {
+        if (Client.isAccountOfType('financial')) {
             return;
         }
 
