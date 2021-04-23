@@ -695,7 +695,7 @@ var ClientBase = function () {
     var isOptionsBlocked = function isOptionsBlocked() {
         var options_blocked_countries = ['au'];
         var country = State.getResponse('authorize.country');
-        console.log("country", country);
+
         return options_blocked_countries.includes(country);
     };
 
@@ -9637,7 +9637,6 @@ var BinaryLoader = function () {
             });
         }
         if (Client.isLoggedIn() && Client.isOptionsBlocked()) {
-            console.warn("Here");
             BinarySocket.wait('authorize').then(function () {
                 return displayMessage(error_messages.options_blocked());
             });
@@ -11757,6 +11756,7 @@ var LoggedInHandler = function () {
             if (set_default) {
                 var lang_cookie = urlLang(redirect_url) || Cookies.get('language');
                 var language = getLanguage();
+                console.log('Logged In');
                 redirect_url = Client.isAccountOfType('financial') || Client.isOptionsBlocked() ? urlFor('user/metatrader') : Client.defaultRedirectUrl();
                 if (lang_cookie && lang_cookie !== language) {
                     redirect_url = redirect_url.replace(new RegExp('/' + language + '/', 'i'), '/' + lang_cookie.toLowerCase() + '/');
@@ -23584,7 +23584,7 @@ var TradePage = function () {
     };
 
     var init = function init() {
-        if (Client.isAccountOfType('financial')) {
+        if (Client.isAccountOfType('financial') || Client.isOptionsBlocked()) {
             return;
         }
 
