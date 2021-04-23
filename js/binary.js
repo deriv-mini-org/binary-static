@@ -9637,12 +9637,11 @@ var BinaryLoader = function () {
             });
         }
         if (Client.isLoggedIn() && Client.isOptionsBlocked()) {
-            console.log('Message showing');
             BinarySocket.wait('authorize').then(function () {
                 return displayMessage(error_messages.options_blocked());
             });
         }
-
+        console.log('Messages cecked');
         BinarySocket.setOnDisconnect(active_script.onDisconnect);
     };
 
@@ -27968,7 +27967,7 @@ __webpack_require__(/*! ./_common/lib/plugins */ "./src/javascript/_common/lib/p
 __webpack_require__(/*! jquery.scrollto */ "./node_modules/jquery.scrollto/jquery.scrollTo.js");
 
 var BinaryLoader = __webpack_require__(/*! ./app/base/binary_loader */ "./src/javascript/app/base/binary_loader.js");
-
+console.log("A");
 document.addEventListener('DOMContentLoaded', BinaryLoader.init);
 window.onpageshow = function (event) {
     if (event.persisted) {
