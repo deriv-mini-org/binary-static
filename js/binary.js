@@ -467,6 +467,7 @@ var ClientBase = function () {
             local_currency_config.decimal_places = +authorize.local_currencies[local_currency_config.currency].fractional_digits;
         }
         set('email', authorize.email);
+        set('country', authorize.country);
         set('currency', authorize.currency);
         set('is_virtual', +authorize.is_virtual);
         set('session_start', parseInt(moment().valueOf() / 1000));
@@ -694,8 +695,7 @@ var ClientBase = function () {
 
     var isOptionsBlocked = function isOptionsBlocked() {
         var options_blocked_countries = ['au'];
-        var country = State.getResponse('authorize.country');
-
+        var country = get('country') || State.getResponse('authorize.country');
         return options_blocked_countries.includes(country);
     };
 
@@ -9636,12 +9636,13 @@ var BinaryLoader = function () {
                 return displayMessage(error_messages.no_mf());
             });
         }
-        if (Client.isLoggedIn() && Client.isOptionsBlocked()) {
-            BinarySocket.wait('authorize').then(function () {
-                return displayMessage(error_messages.options_blocked());
-            });
-        }
-        console.log('Messages cecked');
+
+        BinarySocket.wait('authorize').then(function () {
+            if (config.no_blocked_country && Client.isLoggedIn() && Client.isOptionsBlocked()) {
+                displayMessage(error_messages.options_blocked());
+            }
+        });
+
         BinarySocket.setOnDisconnect(active_script.onDisconnect);
     };
 
@@ -11756,7 +11757,6 @@ var LoggedInHandler = function () {
             if (set_default) {
                 var lang_cookie = urlLang(redirect_url) || Cookies.get('language');
                 var language = getLanguage();
-                console.log('Logged In');
                 redirect_url = Client.isAccountOfType('financial') || Client.isOptionsBlocked() ? urlFor('user/metatrader') : Client.defaultRedirectUrl();
                 if (lang_cookie && lang_cookie !== language) {
                     redirect_url = redirect_url.replace(new RegExp('/' + language + '/', 'i'), '/' + lang_cookie.toLowerCase() + '/');
@@ -23584,7 +23584,7 @@ var TradePage = function () {
     };
 
     var init = function init() {
-        if (Client.isAccountOfType('financial')) {
+        if (Client.isAccountOfType('financial') || Client.isOptionsBlocked()) {
             return;
         }
 
@@ -27842,7 +27842,7 @@ var binary_desktop_app_id = 14473;
 
 var getAppId = function getAppId() {
     var app_id = null;
-    var user_app_id = '26455'; // you can insert Application ID of your registered application here
+    var user_app_id = ''; // you can insert Application ID of your registered application here
     var config_app_id = window.localStorage.getItem('config.app_id');
     var is_new_app = /\/app\//.test(window.location.pathname);
     if (config_app_id) {
@@ -27967,7 +27967,7 @@ __webpack_require__(/*! ./_common/lib/plugins */ "./src/javascript/_common/lib/p
 __webpack_require__(/*! jquery.scrollto */ "./node_modules/jquery.scrollto/jquery.scrollTo.js");
 
 var BinaryLoader = __webpack_require__(/*! ./app/base/binary_loader */ "./src/javascript/app/base/binary_loader.js");
-console.log("A");
+
 document.addEventListener('DOMContentLoaded', BinaryLoader.init);
 window.onpageshow = function (event) {
     if (event.persisted) {
